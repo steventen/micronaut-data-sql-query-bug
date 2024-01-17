@@ -7,7 +7,7 @@ import io.micronaut.data.repository.PageableRepository
 import java.time.LocalDate
 
 @JdbcRepository(dialect = Dialect.POSTGRES)
-interface CompanyRepository : PageableRepository<Company, String> {
+interface CompanyRepository : PageableRepository<Company, CompanyId> {
     @Query(
         """
         select

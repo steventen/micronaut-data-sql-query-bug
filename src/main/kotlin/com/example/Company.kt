@@ -1,19 +1,28 @@
 package com.example
 
-import io.micronaut.core.annotation.Introspected
+import io.micronaut.context.annotation.Mapper
+import io.micronaut.data.annotation.Embeddable
+import io.micronaut.data.annotation.EmbeddedId
+import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.serde.annotation.Serdeable
 import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import jakarta.persistence.Table
 import java.math.BigDecimal
 
-@Entity
-@Table(name = "companies")
+@Embeddable
+data class CompanyId(
+    @Column(name = "org_id")
+    val orgId: String,
+    @Column(name = "name")
+    val name: String,
+    @Column(name = "value_rank")
+    val valueRank: Int,
+)
+
+@MappedEntity("companies")
 @Serdeable
 data class Company(
-    @Id
-    val orgId: String,
+    @EmbeddedId
+    val companyId: CompanyId,
 
     val name: String,
 
@@ -21,3 +30,14 @@ data class Company(
 
     val valueRank: Int
 )
+
+@Serdeable
+data class CompanyDto(
+    val name: String,
+    val valueRank: Int
+)
+
+interface CompanyMapper {
+    @Mapper
+    fun toCompanyDto(company: Company): CompanyDto
+}
